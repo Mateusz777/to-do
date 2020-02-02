@@ -1,44 +1,28 @@
 import React, { Component } from 'react';
 import './App.css';
-
-class ToDoItem extends Component {
-    state = {
-        done: this.props.done
-    }
-
-    toggleDone = () => {
-        this.setState({
-            done: !this.state.done,
-        })
-    }
-
-    render () {
-        const {text} = this.props;
-        return (
-            <div onClick={this.toggleDone} className={this.state.done ? 'doneToDo' : ''}>
-                <p>{text}</p>
-            </div>
-        )
-    }
-}
+import ToDoItem from './components/ToDoItem';
+import NewToDoForm from './components/NewToDoForm';
 
 class ToDoList extends Component {
+    static defaultProps = {
+        done: false
+    }
 
     state = {
         tasks: this.props.tasks,
         draft: '',
     }
 
-    updateDraft = (event) => {
+    updateDraft = e => {
         this.setState({
-            draft: event.target.value,
+            draft: e.target.value,
         })
     }
 
     addTask = () => {
         const {tasks, draft} = this.state;
         const list = tasks;
-        list.push(draft);
+        list.push({text: draft, done: false});
         this.setState({
             tasks: list,
             draft: '',
@@ -55,8 +39,11 @@ class ToDoList extends Component {
                {tasks.map(task =>
                    <ToDoItem text={task.text} done={task.done}/>
                )}
-               <input onChange={this.updateDraft} type="text" value={draft}/>
-               <button onClick={this.addTask}>Add task</button>
+               <NewToDoForm
+                    onSubmit={this.addTask}
+                    onChange={this.updateDraft}
+                    draft={draft}
+               />
             </div>
 
         )
@@ -67,7 +54,7 @@ class ToDoList extends Component {
 class App extends Component {
     myTasks = [
         {done: true, text: "wynieść smieci"},
-        {done: false, text: "zrobić pranie"},
+        {text: "zrobić pranie"},
         {done: false, text: "wysmarkać nos"}
     ]
 
