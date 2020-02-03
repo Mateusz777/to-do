@@ -1,4 +1,14 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
+
+const Item = styled.div`
+    background: #795548;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    padding: 14px;
+    color: ${props => props.done ? '#8BC34A' : '#fff'};
+    text-decoration: ${props => props.done ? 'line-through' : 'none'};
+`
 
 class ToDoItem extends Component {
     state = {
@@ -14,9 +24,9 @@ class ToDoItem extends Component {
     render () {
         const {text} = this.props;
         return (
-            <div onClick={this.toggleDone} className={this.state.done ? 'doneToDo' : ''}>
-                <p>{text}</p>
-            </div>
+            <Item onClick={this.toggleDone} done={this.state.done}>
+                {text}
+            </Item>
         )
     }
 }
